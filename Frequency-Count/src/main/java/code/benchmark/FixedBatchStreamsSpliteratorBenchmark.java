@@ -13,9 +13,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 /**
  * Created by Rushi Desai on 11/10/2017
  * <p>
- * Micro-benchmark to compare nio vs FixedBatchSizeSpliterator impl
+ * Micro-benchmark to compare nio vs FixedBatchSizeStreamsSpliterator impl
  */
-public class FixedBatchSpliteratorBenchmark {
+public class FixedBatchStreamsSpliteratorBenchmark {
 
     public static void main(String[] args) throws IOException {
         final Path inputPath = createInput();
@@ -39,7 +39,7 @@ public class FixedBatchSpliteratorBenchmark {
         final long startTime = System.nanoTime();
         try (Stream<String> lines = input) {
             final long totalTime = lines.parallel()
-                    .mapToLong(FixedBatchSpliteratorBenchmark::processLine).sum();
+                    .mapToLong(FixedBatchStreamsSpliteratorBenchmark::processLine).sum();
             final double cpuTime = totalTime, realTime = System.nanoTime() - startTime;
             final int virtualCores = Runtime.getRuntime().availableProcessors();
             System.out.println("          Cores: " + virtualCores);

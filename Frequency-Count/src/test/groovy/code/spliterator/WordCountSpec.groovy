@@ -23,7 +23,7 @@ class WordCountSpec extends Specification {
     @Shared
     String dummyPath = '/dummyPath'
 
-    //Doesnt test anything. Just executes api on the file given.
+    //Doesn't test anything. Just executes api on the file given.
     def "test countFrequencyAndPrint from file"() {
         given: "File with certain text"
         String pathString = "src/test/resources/paragraph.txt"
