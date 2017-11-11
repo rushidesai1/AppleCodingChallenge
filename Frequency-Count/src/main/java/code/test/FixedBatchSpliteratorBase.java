@@ -42,12 +42,12 @@ public abstract class FixedBatchSpliteratorBase<T> implements Spliterator<T> {
         this(characteristics, batchSize, Long.MAX_VALUE);
     }
 
-    public FixedBatchSpliteratorBase(int characteristics) {
-        this(characteristics, 128, Long.MAX_VALUE);
+    public FixedBatchSpliteratorBase(int batchSize) {
+        this(IMMUTABLE | ORDERED | NONNULL, batchSize);
     }
 
     public FixedBatchSpliteratorBase() {
-        this(IMMUTABLE | ORDERED | NONNULL);
+        this(128);
     }
 
     /**
