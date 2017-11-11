@@ -6,9 +6,9 @@ import spock.lang.Unroll
 /**
  * Created by Rushi Desai on 11/10/2017
  *
- * We test FixedBatchSpliteratorBase via FixedBatchSpliterator. We only test those methods which are not overridden
+ * We test FixedBatchStreamsSpliteratorBase via FixedBatchStreamsStreamsSpliterator. We only test those methods which are not overridden
  */
-class FixedBatchSpliteratorBaseSpec extends Specification {
+class FixedBatchStreamsSpliteratorBaseSpec extends Specification {
     void setup() {
     }
 
@@ -19,8 +19,8 @@ class FixedBatchSpliteratorBaseSpec extends Specification {
     def "test trySplit"() {
         given: "Some Mock dummy spliterator to be wrapped"
         Spliterator mockSpliterator = Mock()
-        and: "we wrap it with FixedBatchSpliterator"
-        FixedBatchSpliterator batchedSpliterator = FixedBatchSpliterator.batchedSpliterator(mockSpliterator, batchSize)
+        and: "we wrap it with FixedBatchStreamsStreamsSpliterator"
+        FixedBatchStreamsStreamsSpliterator batchedSpliterator = FixedBatchStreamsStreamsSpliterator.batchedSpliterator(mockSpliterator, batchSize)
 
         when: "call trySlpit as long as you can"
         int trySplitTimes = (elements.size() % batchSize == 0) ? (elements.size() / batchSize) : (elements.size() / batchSize + 1)

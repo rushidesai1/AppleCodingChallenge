@@ -11,7 +11,7 @@ import java.util.stream.Stream
 /**
  * Created by Rushi Desai on 11/10/2017
  */
-class FixedBatchSpliteratorSpec extends Specification {
+class FixedBatchStreamsSpliteratorSpec extends Specification {
     void setup() {
     }
 
@@ -22,7 +22,7 @@ class FixedBatchSpliteratorSpec extends Specification {
     def "test batchedSpliterator"() {
         Spliterator mockSpliterator = Mock()
         when:
-        FixedBatchSpliterator batchedSpliterator = FixedBatchSpliterator.batchedSpliterator(mockSpliterator, 10)
+        FixedBatchStreamsStreamsSpliterator batchedSpliterator = FixedBatchStreamsStreamsSpliterator.batchedSpliterator(mockSpliterator, 10)
 
         then: "retiurned object shouldnt be null"
         batchedSpliterator != null
@@ -33,7 +33,7 @@ class FixedBatchSpliteratorSpec extends Specification {
 
     def "test batchedSpliterator null"() {
         when: "spliterator is null"
-        FixedBatchSpliterator.batchedSpliterator(null, 10)
+        FixedBatchStreamsStreamsSpliterator.batchedSpliterator(null, 10)
 
         then: "Null pointer exception is thrown"
         def e = thrown(SpliteratorCannotBeNullException)
@@ -42,7 +42,7 @@ class FixedBatchSpliteratorSpec extends Specification {
 
     def "test batchedSpliterator batchsize 0"() {
         when: "spliterator is null"
-        FixedBatchSpliterator.batchedSpliterator(null, 0)
+        FixedBatchStreamsStreamsSpliterator.batchedSpliterator(null, 0)
 
         then: "Null pointer exception is thrown"
         def e = thrown(BatchSizeCannotBeNullException)
@@ -52,7 +52,7 @@ class FixedBatchSpliteratorSpec extends Specification {
     def "test withBatchSize"() {
         final Stream mockStream = Mock()
         when:
-        Stream stream = FixedBatchSpliterator.withBatchSize(mockStream, 10)
+        Stream stream = FixedBatchStreamsStreamsSpliterator.withBatchSize(mockStream, 10)
 
         then: "retiurned object shouldnt be null"
         1 * mockStream.spliterator() >> Mock(Spliterator)
@@ -61,7 +61,7 @@ class FixedBatchSpliteratorSpec extends Specification {
 
     def "test withBatchSize null"() {
         when: "spliterator is null"
-        FixedBatchSpliterator.withBatchSize(null, 10)
+        FixedBatchStreamsStreamsSpliterator.withBatchSize(null, 10)
 
         then: "Null pointer exception is thrown"
         def e = thrown(SpliteratorCannotBeNullException)
@@ -70,7 +70,7 @@ class FixedBatchSpliteratorSpec extends Specification {
 
     def "test withBatchSize batchsize 0"() {
         when: "spliterator is null"
-        FixedBatchSpliterator.withBatchSize(null, 0)
+        FixedBatchStreamsStreamsSpliterator.withBatchSize(null, 0)
 
         then: "Null pointer exception is thrown"
         def e = thrown(BatchSizeCannotBeNullException)
@@ -80,7 +80,7 @@ class FixedBatchSpliteratorSpec extends Specification {
     def "test tryAdvance"() {
         given: "Instance of FixedBtachSpliterator"
         Spliterator mockSpliterator = Mock()
-        FixedBatchSpliterator fixedBatchSpliterator = new FixedBatchSpliterator(mockSpliterator, 10)
+        FixedBatchStreamsStreamsSpliterator fixedBatchSpliterator = new FixedBatchStreamsStreamsSpliterator(mockSpliterator, 10)
 
         when:
         fixedBatchSpliterator.tryAdvance(Mock(Consumer))
@@ -92,7 +92,7 @@ class FixedBatchSpliteratorSpec extends Specification {
     def "test forEachRemaining"() {
         given: "Instance of FixedBtachSpliterator"
         Spliterator mockSpliterator = Mock()
-        FixedBatchSpliterator fixedBatchSpliterator = new FixedBatchSpliterator(mockSpliterator, 10)
+        FixedBatchStreamsStreamsSpliterator fixedBatchSpliterator = new FixedBatchStreamsStreamsSpliterator(mockSpliterator, 10)
 
         when:
         fixedBatchSpliterator.forEachRemaining(Mock(Consumer))

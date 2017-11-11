@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import static code.spliterator.FixedBatchSpliterator.withBatchSize;
+import static code.spliterator.FixedBatchStreamsStreamsSpliterator.withBatchSize;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**

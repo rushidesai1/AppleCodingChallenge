@@ -1,26 +1,20 @@
 package code.api;
 
+import com.google.re2j.Matcher;
+import com.google.re2j.Pattern;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static code.spliterator.FixedBatchSpliterator.withBatchSize;
+import static code.spliterator.FixedBatchStreamsStreamsSpliterator.withBatchSize;
 
 /**
  * Object client can use.
- * <p>
- * While counting frequency I make certain assumptions since there wasnt any clear direction
- * 1. All words are case sensitive. i.e I count 'you' and 'You' are different words. (It is trivial to make then case insensitive)
- * 2. "can't" is taken as 1 word. Also, Delaney-Podmore is considered to be 1 word.
- * 3. In the worst case, count of a specific word is in the range of long.
- * 4. I ignore , . ? etc symbols. To consider as valid words I only count a-z, 0-9 and ' or - if its between a-z or/and 0-9.
- * 5. As long as above condition is satisfied, I dont check if its a valid dictionary word or not
  */
 public class WordCount {
 
@@ -37,6 +31,11 @@ public class WordCount {
         wordCountDelegate = new WordCountDelegate();
     }
 
+    public WordCount(final int batchSize1, String regex) {
+        batchSize = batchSize1;
+        wordCountDelegate = new WordCountDelegate(regex);
+    }
+
     /**
      * Api exposed to client
      *
@@ -48,10 +47,25 @@ public class WordCount {
         wordCountDelegate.printMap(freq);
     }
 
-    static class WordCountDelegate {
+    private static class WordCountDelegate {
+
+        final private Pattern COMPILED_PATTERN;
+
+
+        WordCountDelegate() {
+            COMPILED_PATTERN = precompilePattern(alphaNumericApostropheHyphenRegex());
+        }
+
+        WordCountDelegate(final String regex1) {
+            COMPILED_PATTERN = precompilePattern(regex1);
+        }
+
+        private static Pattern precompilePattern(final String regex) {
+            return Pattern.compile(regex);
+        }
 
         public Map<String, Long> countAndSortByFrequency(final String path, final int batchSize) throws IOException {
-            final Stream<String> stringStream = fetchStream(path, batchSize);
+            final Stream<String> stringStream = fetchBatchedStream(path, batchSize);
             try (final Stream<String> lines = stringStream) {
                 final Map<String, Long> wordFreqMap = countFrequency(lines);
                 final Map<String, Long> finalMap = sortMapByValue(wordFreqMap);
@@ -60,7 +74,15 @@ public class WordCount {
             }
         }
 
-        Stream<String> fetchStream(final String path, final int batchSize) throws IOException {
+        /**
+         * Given a valid file path, it returns a stream handle which is batched.
+         *
+         * @param path
+         * @param batchSize
+         * @return
+         * @throws IOException
+         */
+        Stream<String> fetchBatchedStream(final String path, final int batchSize) throws IOException {
             return withBatchSize(Files.lines(Paths.get(path)), batchSize);
         }
 
@@ -89,21 +111,30 @@ public class WordCount {
                     .forEach((key, value) -> System.out.println(value + "\t" + key));
         }
 
-        Stream<String> processLine(final String line) {
+        private Stream<String> processLine(final String line) {
             if (line == null) return null;
             return Arrays.stream(
-                    santizeAndsplitString(line, punctuationRegex())
+                    santizeAndSplitString(line)
             );
         }
 
-        String punctuationRegex() {
-            return "(?=[a-zA-Z0-9])([a-zA-Z0-9'-]+)";
+        /**
+         * https://swtch.com/~rsc/regexp/regexp1.html
+         * Java regex uses recursive backtracking whose performance can be drastically improved. Thus I use google's
+         * library re2j which uses https://github.com/google/re2j Thompson's NFA algorithm.
+         */
+        private static String alphaNumericApostropheHyphenRegex() {
+//            https://regex101.com/r/2iihJA/1
+            String alphaNumericAllowed = "[a-zA-Z0-9]+";
+            String wordsWithApostropheInMiddle = "(?:'[a-zA-Z0-9]+)*";
+            String wordsWithHypenInMiddle = "(?:-[a-zA-Z0-9]+)*";
+            return alphaNumericAllowed + wordsWithApostropheInMiddle + wordsWithHypenInMiddle;
         }
 
-        String[] santizeAndsplitString(final String stringToTest, final String regex) {
+        private String[] santizeAndSplitString(final String stringToTest) {
             if (stringToTest == null) return null;
             final List<String> allMatches = new ArrayList<>();
-            final Matcher m = Pattern.compile(regex)
+            final Matcher m = COMPILED_PATTERN
                     .matcher(stringToTest);
             while (m.find()) {
                 allMatches.add(m.group());

@@ -9,17 +9,10 @@ import static java.util.Spliterators.spliterator;
 /**
  * Created by Rushi Desai on 11/10/2017
  * <p>
- * http://markmail.org/message/xgcm4dlyrkjymrw4
- * As discussed in the above email link, the authors of java basically propose a splitIterator impl to make parallel
- * processing efficient.
- * <p>
- * The reason current impl isn't efficient is the result of Amdahl's law. If the ratio of parallel processing serial
- * processing to isn't high enough then the overhead of creating threads, context switching etc. will result in slower
- * code instead of speeding things.
  *
  * @param <T>
  */
-public abstract class FixedBatchSpliteratorBase<T> implements Spliterator<T> {
+public abstract class FixedBatchStreamsSpliteratorBase<T> implements Spliterator<T> {
     private final int batchSize;
     private final int characteristics;
     private long est;
@@ -32,21 +25,21 @@ public abstract class FixedBatchSpliteratorBase<T> implements Spliterator<T> {
      * @param batchSize
      * @param est
      */
-    public FixedBatchSpliteratorBase(int characteristics, int batchSize, long est) {
+    public FixedBatchStreamsSpliteratorBase(int characteristics, int batchSize, long est) {
         this.characteristics = characteristics | SUBSIZED;
         this.batchSize = batchSize;
         this.est = est;
     }
 
-    public FixedBatchSpliteratorBase(int characteristics, int batchSize) {
+    public FixedBatchStreamsSpliteratorBase(int characteristics, int batchSize) {
         this(characteristics, batchSize, Long.MAX_VALUE);
     }
 
-    public FixedBatchSpliteratorBase(int batchSize) {
+    public FixedBatchStreamsSpliteratorBase(int batchSize) {
         this(IMMUTABLE | ORDERED | NONNULL, batchSize);
     }
 
-    public FixedBatchSpliteratorBase() {
+    public FixedBatchStreamsSpliteratorBase() {
         this(128);
     }
 

@@ -38,14 +38,14 @@ class WordCountSpec extends Specification {
     def "test countFrequencyAndPrint"() {
         given: "instance of a WordCount with a fixed batchSize and WordCountDelegate is mocked"
         wordCount.wordCountDelegate = Mock(WordCount.WordCountDelegate)
-        WordCount.WordCountDelegate wordCountDelegate = wordCount.wordCountDelegate
+        def wordCountDelegate = wordCount.wordCountDelegate
 
         when: "countFrequencyAndPrint is called"
         wordCount.countFrequencyAndPrint(dummyPath)
 
         then:
-        1 * wordCountDelegate.countAndSortByFrequency(*_) >> { println("I am called"); return [:] }
-        1 * wordCountDelegate.printMap(_) >> { println "printMap am called" }
+        1 * wordCountDelegate.countAndSortByFrequency(*_) >> { return [:] }
+        1 * wordCountDelegate.printMap(_)
     }
 
     @Unroll
@@ -61,7 +61,7 @@ class WordCountSpec extends Specification {
         Map<String, Long> map = wordCount.wordCountDelegate.countAndSortByFrequency(path, 10)
 
         then:
-        1 * wordCount.wordCountDelegate.fetchStream(_, _) >> Stream.of(line)
+        1 * wordCount.wordCountDelegate.fetchBatchedStream(_, _) >> Stream.of(line)
         1 * wordCount.wordCountDelegate.countFrequency(_) >> Mock(Map)
         1 * wordCount.wordCountDelegate.sortMapByValue(_) >> Mock(Map)
 
@@ -89,17 +89,19 @@ class WordCountSpec extends Specification {
         returnMap == expected
 
         where:
-        values                                            || expected
-        ["Hello", "How", "are", "you"] as String[]        || ["Hello": 1, "How": 1, "are": 1, "you": 1]
-        ["you", "How", "are", "you"] as String[]          || ["How": 1, "are": 1, "you": 2]
-        ["you", "How", "are", "you-and"] as String[]      || ["you": 1, "How": 1, "are": 1, "you-and": 1]
-        ["can't", "How", "are", "you-and"] as String[]    || ["How": 1, "are": 1, "you-and": 1, "can't": 1]
-        ["'", ".", "hello!", "-and", "and1!"] as String[] || ["hello": 1, "and": 1, "and1": 1]
-        ["hello!hello", "-", "hi,\"", "hi,"] as String[]  || ["hi": 2, "hello": 2]
-        [" ", "   ", "\n", "\t"] as String[]              || [:]
-        [] as String[]                                    || [:]
-        null                                              || [:]
-
+        values                                                                             || expected
+        ["Hello", "How", "are", "you"] as String[]                                         || ["Hello": 1, "How": 1, "are": 1, "you": 1]
+        ["you", "How", "are", "you"] as String[]                                           || ["How": 1, "are": 1, "you": 2]
+        ["you", "You"] as String[]                                                         || ["You": 1, "you": 1]
+        ["you", "How", "are", "you-and"] as String[]                                       || ["you": 1, "How": 1, "are": 1, "you-and": 1]
+        ["can't", "How", "are", "you-and"] as String[]                                     || ["How": 1, "are": 1, "you-and": 1, "can't": 1]
+        ["'", ".", "and-+!`@#\$%^&*():{}|\"?/.,<>", "hello!", "-and", "and1!"] as String[] || ["hello": 1, "and": 2, "and1": 1]
+        ["hello!hello", "-", "hi,\"", "hi,"] as String[]                                   || ["hi": 2, "hello": 2]
+        ["-And", "And-", "'And", "And'", "hello_is"] as String[]                           || ["And": 4, "hello": 1, "is": 1]
+        ["1Node", 1, "hello"] as String[]                                                  || ["1": 1, "1Node": 1, "hello": 1]
+        [" ", "   ", "\n", "\t"] as String[]                                               || [:]
+        [] as String[]                                                                     || [:]
+        null                                                                               || [:]
     }
 
     def "test sortMapByValue"() {
@@ -131,34 +133,28 @@ class WordCountSpec extends Specification {
         when: "printMap is called"
         wordCount.wordCountDelegate.printMap(mapMock)
 
-        then: "map.entrySet should be called once"
-        1 * mapMock.entrySet() >> mockEntry//[Mock(Set)] as HashSet
         then: "forEach should be called once"
-        1 * mockEntry.forEach(_) >> {}
+        1 * mapMock.forEach(_) >> {}
     }
 
     @Unroll
-    def "test punctuationRegex"() {
+    def "test alphaNumericApostropheHyphenRegex"() {
 
         when:
-        String regex = wordCount.wordCountDelegate.punctuationRegex()
+        String regex = WordCount.WordCountDelegate.alphaNumericApostropheHyphenRegex()
 
         then:
-        regex == "(?=[a-zA-Z0-9])([a-zA-Z0-9'-]+)"
+        regex == "[a-zA-Z0-9]+(?:'[a-zA-Z0-9]+)*(?:-[a-zA-Z0-9]+)*"
 
     }
 
     @Unroll
-    def "test santizeAndsplitString"() {
-
-        given:
-        final String regex = wordCount.wordCountDelegate.punctuationRegex()
-
+    def "test santizeAndSplitString"() {
         when:
-        String[] splitString = wordCount.wordCountDelegate.santizeAndsplitString(stringToTest, regex)
+        String[] returnedString = wordCount.wordCountDelegate.santizeAndSplitString(stringToTest)
 
         then:
-        (expected == null && splitString == null) || Arrays.equals(splitString, expected)
+        (expected == null && returnedString == null) || Arrays.equals(returnedString, expected)
 
         where:
         stringToTest                                                                || expected

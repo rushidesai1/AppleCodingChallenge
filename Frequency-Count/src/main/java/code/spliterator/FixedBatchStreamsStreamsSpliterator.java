@@ -17,10 +17,10 @@ import static java.util.stream.StreamSupport.stream;
  *
  * @param <T>
  */
-public class FixedBatchSpliterator<T> extends FixedBatchSpliteratorBase<T> {
+public class FixedBatchStreamsStreamsSpliterator<T> extends FixedBatchStreamsSpliteratorBase<T> {
     private final Spliterator<T> spliterator;
 
-    public FixedBatchSpliterator(Spliterator<T> toWrap, int batchSize) {
+    public FixedBatchStreamsStreamsSpliterator(Spliterator<T> toWrap, int batchSize) {
         super(toWrap.characteristics(), batchSize, toWrap.estimateSize());
         spliterator = toWrap;
     }
@@ -33,10 +33,10 @@ public class FixedBatchSpliterator<T> extends FixedBatchSpliteratorBase<T> {
      * @param <T>
      * @return
      */
-    public static <T> FixedBatchSpliterator<T> batchedSpliterator(Spliterator<T> toWrap, int batchSize) {
+    public static <T> FixedBatchStreamsStreamsSpliterator<T> batchedSpliterator(Spliterator<T> toWrap, int batchSize) {
         if (batchSize == 0) throw new BatchSizeCannotBeNullException("Batch Size Cannot be null");
         if (toWrap == null) throw new SpliteratorCannotBeNullException();
-        return new FixedBatchSpliterator<>(toWrap, batchSize);
+        return new FixedBatchStreamsStreamsSpliterator<>(toWrap, batchSize);
     }
 
     /**
