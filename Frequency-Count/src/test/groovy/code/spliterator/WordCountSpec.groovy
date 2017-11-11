@@ -133,8 +133,10 @@ class WordCountSpec extends Specification {
         when: "printMap is called"
         wordCount.wordCountDelegate.printMap(mapMock)
 
-        then: "forEach should be called once"
-        1 * mapMock.forEach(_) >> {}
+        then: "map.entrySet should be called once"
+        1 * mapMock.entrySet() >> mockEntry
+        and: "forEach should be called once"
+        1 * mockEntry.forEach(_) >> {}
     }
 
     @Unroll

@@ -108,7 +108,8 @@ public class WordCount {
 
         void printMap(final Map<String, Long> orderedMap) {
             orderedMap
-                    .forEach((key, value) -> System.out.println(value + "\t" + key));
+                    .entrySet()
+                    .forEach(System.out::println);
         }
 
         private Stream<String> processLine(final String line) {
