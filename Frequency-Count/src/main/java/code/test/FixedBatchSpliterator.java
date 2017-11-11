@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import static java.util.stream.StreamSupport.stream;
 
 /**
- * Created by Rushi Desai on 11/9/2017
+ * Created by Rushi Desai on 11/10/2017
  *
  * <p>
  * Just a impl for the base class. This takes in a stream and batchSize and wraps it with the base class.

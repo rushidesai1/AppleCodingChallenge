@@ -86,8 +86,7 @@ public class WordCount {
 
         void printMap(final Map<String, Long> orderedMap) {
             orderedMap
-                    .entrySet()
-                    .forEach(System.out::println);
+                    .forEach((key, value) -> System.out.println(value + "\t" + key));
         }
 
         Stream<String> processLine(final String line) {
@@ -112,6 +111,7 @@ public class WordCount {
             return allMatches
                     .stream()
                     .filter(s -> s.matches("\\S+"))
+//                    .map(String::toLowerCase)     //Add this line to ignore case sensitivity
                     .toArray(String[]::new);
 
         }

@@ -7,7 +7,7 @@ import spock.lang.Unroll
 import java.util.stream.Stream
 
 /**
- * Created by Rushi Desai on 11/9/2017
+ * Created by Rushi Desai on 11/10/2017
  */
 class WordCountSpec extends Specification {
     WordCount wordCount
@@ -21,6 +21,18 @@ class WordCountSpec extends Specification {
 
     @Shared
     String dummyPath = '/dummyPath'
+
+    //Doesnt test anything. Just executes api on the file given.
+    def "test countFrequencyAndPrint from file"() {
+        given: "File with certain text"
+        String pathString = "src/test/resources/paragraph.txt"
+
+        when:
+        wordCount.countFrequencyAndPrint(pathString)
+
+        then:
+        true
+    }
 
     def "test countFrequencyAndPrint"() {
         given: "instance of a WordCount with a fixed batchSize and WordCountDelegate is mocked"
