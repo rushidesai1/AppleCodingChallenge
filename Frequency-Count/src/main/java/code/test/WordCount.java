@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static code.test.FixedBatchSpliterator.withBatchSize;
-//import static code.test.WordCount.WordCountDelegate.countAndSortByFrequency;
-//import static code.test.WordCount.WordCountDelegate.printMap;
 
 /**
  * Object client can use.

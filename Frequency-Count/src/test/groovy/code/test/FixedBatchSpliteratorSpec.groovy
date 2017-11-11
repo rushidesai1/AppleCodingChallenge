@@ -8,6 +8,9 @@ import spock.lang.Unroll
 import java.util.function.Consumer
 import java.util.stream.Stream
 
+/**
+ * Created by Rushi Desai on 11/9/2017
+ */
 class FixedBatchSpliteratorSpec extends Specification {
     void setup() {
     }

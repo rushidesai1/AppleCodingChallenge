@@ -11,6 +11,8 @@ import static code.test.FixedBatchSpliterator.withBatchSize;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * Created by Rushi Desai on 11/9/2017
+ *
  * Just to compare nio vs batch size impl
  */
 public class FixedBatchSpliteratorBenchmark {
