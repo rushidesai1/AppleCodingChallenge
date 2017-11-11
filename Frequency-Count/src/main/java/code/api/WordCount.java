@@ -1,4 +1,4 @@
-package code.test;
+package code.api;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static code.test.FixedBatchSpliterator.withBatchSize;
+import static code.spliterator.FixedBatchSpliterator.withBatchSize;
 
 /**
  * Object client can use.

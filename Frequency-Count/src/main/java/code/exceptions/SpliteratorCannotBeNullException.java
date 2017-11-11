@@ -1,4 +1,4 @@
-package exceptions;
+package code.exceptions;
 
 /**
  * Created by Rushi Desai on 11/10/2017

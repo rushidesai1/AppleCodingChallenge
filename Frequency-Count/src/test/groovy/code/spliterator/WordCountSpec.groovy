@@ -1,5 +1,6 @@
-package code.test
+package code.spliterator
 
+import code.api.WordCount
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll

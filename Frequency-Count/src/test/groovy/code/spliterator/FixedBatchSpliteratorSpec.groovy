@@ -1,7 +1,7 @@
-package code.test
+package code.spliterator
 
-import exceptions.BatchSizeCannotBeNullException
-import exceptions.SpliteratorCannotBeNullException
+import code.exceptions.BatchSizeCannotBeNullException
+import code.exceptions.SpliteratorCannotBeNullException
 import spock.lang.Specification
 import spock.lang.Unroll
 

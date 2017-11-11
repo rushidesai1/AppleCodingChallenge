@@ -1,4 +1,4 @@
-package code.test
+package code.spliterator
 
 import spock.lang.Specification
 

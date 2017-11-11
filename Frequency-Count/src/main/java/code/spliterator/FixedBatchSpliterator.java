@@ -1,7 +1,7 @@
-package code.test;
+package code.spliterator;
 
-import exceptions.BatchSizeCannotBeNullException;
-import exceptions.SpliteratorCannotBeNullException;
+import code.exceptions.BatchSizeCannotBeNullException;
+import code.exceptions.SpliteratorCannotBeNullException;
 
 import java.util.Spliterator;
 import java.util.function.Consumer;

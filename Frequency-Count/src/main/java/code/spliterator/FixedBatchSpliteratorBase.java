@@ -1,4 +1,4 @@
-package code.test;
+package code.spliterator;
 
 import java.util.Comparator;
 import java.util.Spliterator;
