@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Frequency-Count.iml" filepath="$PROJECT_DIR$/Frequency-Count.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Frequency-Count_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Frequency-Count_main.iml" group="Frequency-Count" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Frequency-Count_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Frequency-Count_test.iml" group="Frequency-Count" />
+    </modules>
+  </component>
+</project>
